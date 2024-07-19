@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hash Sonuçları</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 py-10 px-4">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h1 class="text-2xl font-bold mb-4">Hash Sonuçları</h1>
+
+      <h2 class="text-xl font-bold mt-4 mb-2">PGP Public Key</h2>
+      <pre class="bg-gray-200 p-4 rounded-md">{{ public_key }}</pre>
+
+      <h2 class="text-xl font-bold mt-6 mb-2">Dosya Değerleri</h2>
+      <p>
+        <strong class="font-semibold">MD5:</strong> {{ file_hashes['md5'] }}
+      </p>
+      <p>
+        <strong class="font-semibold">SHA-256:</strong> {{ file_hashes['sha256']
+        }}
+      </p>
+      <p>
+        <strong class="font-semibold">SHA-512:</strong> {{ file_hashes['sha512']
+        }}
+      </p>
+
+      <h2 class="text-xl font-bold mt-6 mb-2">Parça Değerleri</h2>
+      {% for chunk_hash in chunk_hashes %}
+      <div class="bg-gray-200 p-4 rounded-md mb-4">
+        <p>
+          <strong class="font-semibold"
+            >Parça {{ chunk_hash.chunk_index }}:</strong
+          >
+        </p>
+        <p>MD5: {{ chunk_hash.md5 }}</p>
+        <p>SHA-256: {{ chunk_hash.sha256 }}</p>
+        <p>SHA-512: {{ chunk_hash.sha512 }}</p>
+      </div>
+      {% endfor %}
+
+      <h2 class="text-xl font-bold mt-6 mb-2">Şifrelenmiş Dosya</h2>
+      <p>{{ encrypted_file }}</p>
+
+      <form method="post" action="/decrypt" class="mt-6">
+        <input
+          type="hidden"
+          name="encrypted_file"
+          value="{{ encrypted_file }}"
+        />
+        <input type="hidden" name="private_key" value="{{ private_key }}" />
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Decrypt
+        </button>
+      </form>
+    </div>
+  </body>
+</html>
